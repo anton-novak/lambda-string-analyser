@@ -1,3 +1,5 @@
+import type { LambdaFunctionURLEvent } from "aws-lambda";
+
 type TextEvent = {
     text: string
 }
@@ -24,20 +26,18 @@ function isNewLine(char: string) {
     return (/[\r\n]/).test(char);
 }
 
-function analyseText(text: string): Partial<TextAnalysisResult> {
+function analyseText(text: string): TextAnalysisResult {
     let wordCount = 0;
     let characterCount = 0;
     let lineCount = 1;
     let longestWordLength = 0;
     let mostCommonLetter = undefined;
 
-    let pointer = 0;
     let lookingAtWord = false;
     let thisWordLength = 0;
     let charMap = new Map<string, number>();
 
-    while (pointer < text.length) {
-        const char = text[pointer];
+    for (const char of text) {
         if (isAlphanumeric(char)) {
             characterCount++;
             thisWordLength++;
@@ -57,8 +57,6 @@ function analyseText(text: string): Partial<TextAnalysisResult> {
                 lookingAtWord = false;
             }
         }
-
-        pointer++;
     }
 
     let charMapArray = Array.from(charMap);
@@ -74,10 +72,26 @@ function analyseText(text: string): Partial<TextAnalysisResult> {
     }
 }
 
-export const handler = async (event: TextEvent) => {
+export const handler = async (event: LambdaFunctionURLEvent) => {
     try {
-        if (!event || !event.text || typeof event.text !== "string"
-            || event.text.length < 5 || event.text.length > 300) {
+        let textEvent: TextEvent;
+
+        try {
+            if (!event.body) throw new Error;
+            textEvent = JSON.parse(event.body);
+        } catch (error) {
+            console.error(error);
+            return {
+                statusCode: 400,
+                body: JSON.stringify({
+                    error: "Invalid JSON"
+                })
+            }
+        }
+
+        const { text } = textEvent;
+
+        if (!text || typeof text !== "string" || text.length < 5 || text.length > 300) {
             return {
                 statusCode: 400,
                 body: JSON.stringify({
@@ -85,8 +99,6 @@ export const handler = async (event: TextEvent) => {
                 })
             };
         }
-
-        const text = event.text;
 
         const analysisResult = analyseText(text);
 

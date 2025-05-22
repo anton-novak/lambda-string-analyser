@@ -27,7 +27,8 @@ test('Handler should produce valid results for valid input', async () => {
         fs.readFileSync(path.join(process.cwd(), 'test-mocks.json'), "utf-8"));
 
     for (const mock of mocks) {
-        const result = await handler({ text: mock.text });
+        // @ts-expect-error
+        const result = await handler({ body: JSON.stringify({ text: mock.text }) });
         expect(result.statusCode).toBe(200);
         expect(result.body).toBe(JSON.stringify(mock.answers));
     }
