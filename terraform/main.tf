@@ -35,7 +35,7 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 
 resource "aws_lambda_function" "text_analyser" {
   filename         = var.zip_file
-  function_name    = "text-analyzer-${var.environment}"
+  function_name    = "text-analyser-${var.environment}"
   role             = aws_iam_role.lambda_role.arn
   handler          = "index.handler"
   source_code_hash = filebase64sha256(var.zip_file)
@@ -44,7 +44,7 @@ resource "aws_lambda_function" "text_analyser" {
   memory_size      = var.lambda_memory_size
 }
 
-resource "aws_lambda_function_url" "text_analyzer_url" {
+resource "aws_lambda_function_url" "text_analyser_url" {
   function_name      = aws_lambda_function.text_analyser.function_name
   authorization_type = "NONE"
 
@@ -56,5 +56,5 @@ resource "aws_lambda_function_url" "text_analyzer_url" {
 }
 
 output "invocation_url" {
-  value = aws_lambda_function_url.text_analyzer_url.function_url
+  value = aws_lambda_function_url.text_analyser_url.function_url
 }
