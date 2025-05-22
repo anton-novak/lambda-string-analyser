@@ -1,0 +1,22 @@
+[
+    {
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\nincididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis\nnostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "answers": {
+            "wordCount": 36,
+            "characterCount": 191,
+            "lineCount": 3,
+            "longestWordLength": 12,
+            "mostCommonLetter": "i"
+        }
+    },
+    {
+        "text": "My heart's in the Highlands, my heart is not here,\nMy heart's in the Highlands, a-chasing the deer;\nChasing the wild-deer, and following the roe,\nMy heart's in the Highlands, wherever I go.",
+        "answers": {
+            "wordCount": 35,
+            "characterCount": 147,
+            "lineCount": 4,
+            "longestWordLength": 9,
+            "mostCommonLetter": "e"
+        }
+    }
+]
